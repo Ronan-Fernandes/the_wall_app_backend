@@ -33,7 +33,7 @@ describe("User route tests", () => {
     
     const response = await supertest(app).post('/user').send(user);
 
-    expect(response.statusCode).toEqual(201)
+    expect(response.statusCode).toEqual(201);
     expect(response.body.message).toEqual("User registred with success!");
   });
 
@@ -42,7 +42,7 @@ describe("User route tests", () => {
 
     const response = await supertest(app).post('/user').send(user);
 
-    expect(response.statusCode).toEqual(409)
+    expect(response.statusCode).toEqual(409);
     expect(response.body.error).toEqual("User already exists!");
   });
 
