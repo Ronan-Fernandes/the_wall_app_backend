@@ -1,4 +1,5 @@
 const userModel = require('../model/userModel');
+const sendEmail = require('../service/sendEmail');
 
 const createUser = async (req, res) => {
   try {
@@ -14,10 +15,10 @@ const createUser = async (req, res) => {
     await userModel.createNewUser({
       name,
       email,
-      encriptedPassword: password //use bcrypt to encrypt password
+      password
     });
 
-    //send email
+    await sendEmail(email, name);
 
     res.status(201).json({
       message: "User registred with success!"
