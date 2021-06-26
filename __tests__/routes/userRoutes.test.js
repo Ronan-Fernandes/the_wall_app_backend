@@ -37,9 +37,9 @@ describe("User route tests", () => {
   });
 
   test("POST /user  Create user when user already exists.", async () => {
-    await client.db(TEST_DATABASE).collection(COLLECTION).insertOne({...user, confirm_password: '123456789'});
+    await client.db(TEST_DATABASE).collection(COLLECTION).insertOne({...user});
 
-    const response = await supertest(app).post('/user').send(user);
+    const response = await supertest(app).post('/user').send({ ...user,  confirm_password: '123456789'});
 
     expect(response.statusCode).toEqual(409);
     expect(response.body.error).toEqual("User already exists!");
