@@ -7,8 +7,7 @@ const COLLECTION = 'users';
 const user = {
   name: "Ronan Fernandes",
   email: "email@email.com",
-  password: "123456789",
-  confirm_password: "123456789"
+  password: "123456789"
 }
 
 
@@ -38,12 +37,26 @@ describe("User route tests", () => {
   });
 
   test("POST /user  Create user when user already exists.", async () => {
-    await client.db(TEST_DATABASE).collection(COLLECTION).insertOne({...user});
+    await client.db(TEST_DATABASE).collection(COLLECTION).insertOne({...user, confirm_password: '123456789'});
 
     const response = await supertest(app).post('/user').send(user);
 
     expect(response.statusCode).toEqual(409);
     expect(response.body.error).toEqual("User already exists!");
+  });
+
+  test("POST /user/login", async () => {
+    const createdUser = await client.db(TEST_DATABASE).collection(COLLECTION).insertOne({...user});
+
+    const response = await supertest(app).post('/user/login').send({
+      email: user.email,
+      password: user.password
+    });
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body.token).toBeDefined();
+    expect(response.body.userId).toEqual(createdUser.ops[0]._id);
+    expect(response.body.name).toEqual(createdUser.ops[0].name);
   });
 
 });
