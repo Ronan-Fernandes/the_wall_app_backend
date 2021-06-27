@@ -29,18 +29,18 @@ describe("User route tests", () => {
     await client.close();
   });
 
-  test("POST /user  Create user.", async () => {
+  test("POST /user/register  Create user.", async () => {
 
-    const response = await supertest(app).post('/user').send({ ...user, confirm_password: '123456789' });
+    const response = await supertest(app).post('/user/register').send({ ...user, confirm_password: '123456789' });
 
     expect(response.statusCode).toEqual(201);
     expect(response.body.message).toEqual("User registred with success!");
   });
 
-  test("POST /user  Create user when user already exists.", async () => {
+  test("POST /user/register  Create user when user already exists.", async () => {
     await client.db(TEST_DATABASE).collection(COLLECTION).insertOne({ ...user, password: userHash });
 
-    const response = await supertest(app).post('/user').send({ ...user, confirm_password: '123456789' });
+    const response = await supertest(app).post('/user/register').send({ ...user, confirm_password: '123456789' });
 
     expect(response.statusCode).toEqual(409);
     expect(response.body.error).toEqual("User already exists!");
