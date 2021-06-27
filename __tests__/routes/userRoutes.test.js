@@ -56,7 +56,6 @@ describe("User route tests", () => {
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.token).toBeDefined();
-    expect(response.body.userId).toEqual(createdUser.ops[0]._id);
     expect(response.body.name).toEqual(createdUser.ops[0].name);
   });
 

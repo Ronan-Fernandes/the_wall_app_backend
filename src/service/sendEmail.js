@@ -15,7 +15,7 @@ const sendEmail = async (userEmail, userName) => {
       from: 'the.wall.app.email.2021@gmail.com',
       to: userEmail,
       subject: 'Wellcome to The Wall',
-      text: `Hello! ${userName}, wellcome to The Wall App and thanks for using it.`
+      text: `Hello! ${userName}, welcome to The Wall App and thanks for using it.`
     });
 
   } catch (error) {
@@ -23,4 +23,4 @@ const sendEmail = async (userEmail, userName) => {
   }
 }
 
-module.exports = sendEmail
+module.exports = sendEmail;

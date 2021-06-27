@@ -6,6 +6,10 @@ const schemas = {
     email: Joi.string().email({ tlds: false }).required(),
     password: Joi.string().min(6).max(30).required(),
     confirm_password: Joi.ref("password")
+  }),
+  userLoginPOST: Joi.object().keys({
+    email: Joi.string().email({ tlds: false }).required(),
+    password: Joi.string().min(6).max(30).required(),
   })
 };
 
