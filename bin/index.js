@@ -1,4 +1,5 @@
-const app = require('../src/server');
+/* eslint-disable no-console */
+const app = require("../src/server");
 
 const port = process.env.PORT || 3000;
 

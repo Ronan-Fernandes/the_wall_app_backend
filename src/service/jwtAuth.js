@@ -1,21 +1,20 @@
 const jwt = require("jsonwebtoken");
 
-const SECRET_KEY = process.env.SECRET_KEY;
+const { SECRET_KEY } = process.env;
 
 const generateToken = (payload) => {
   try {
-
     const headers = {
-      expiresIn: '30m',
-      algorithm: 'HS256',
+      expiresIn: "30m",
+      algorithm: "HS256",
     };
-    
+
     const token = jwt.sign(payload, SECRET_KEY, headers);
     return token;
   } catch (error) {
     throw error;
   }
-}
+};
 
 // const validateJWT = (required = true) => (req, _res, next) => {
 //   try {
@@ -32,13 +31,13 @@ const generateToken = (payload) => {
 const validateJWTToken = (token) => {
   try {
     const user = jwt.verify(token, SECRET_KEY);
-    return user
+    return user;
   } catch (error) {
     throw error;
   }
-}
+};
 
 module.exports = {
   validateJWTToken,
-  generateToken
-}
+  generateToken,
+};
