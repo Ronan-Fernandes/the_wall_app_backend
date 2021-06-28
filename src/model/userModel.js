@@ -1,7 +1,7 @@
-require('dotenv/config');
-const mongoConnection = require('../service/mongoConnection');
+require("dotenv/config");
+const mongoConnection = require("../service/mongoConnection");
 
-const DB_NAME = (process.env.NODE_ENV === 'test') ? 'the_wall_app_tests': process.env.DB_NAME;
+const DB_NAME = (process.env.NODE_ENV === "test") ? "the_wall_app_tests" : process.env.DB_NAME;
 const COLLECTION = "users";
 
 const createNewUser = async (userData) => {
@@ -11,7 +11,7 @@ const createNewUser = async (userData) => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 const findUser = async (query) => {
   try {
@@ -20,9 +20,9 @@ const findUser = async (query) => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 module.exports = {
   createNewUser,
-  findUser
-}
+  findUser,
+};
