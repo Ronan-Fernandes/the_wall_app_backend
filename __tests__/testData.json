@@ -13,8 +13,8 @@
       "title": "post title",
       "content": "some post content tha some user has posted.",
       "userName": "user name",
-      "userID": 1,
-      "_id": 1
+      "userID": "60da8527dfd30535d31be06a",
+      "_id": "60da84f3a5cc6d35356d3ab5"
     }
   ],
   "TEST_DATABASE": "the_wall_app_tests",

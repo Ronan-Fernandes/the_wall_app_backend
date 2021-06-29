@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 const supertest = require("supertest");
+const { ObjectId } = require("mongodb");
 const app = require("../../src/server");
+
 const mongoConnection = require("../../src/service/mongoConnection");
 const {
   users,
@@ -9,6 +11,11 @@ const {
   USERS_COLLECTION,
   POSTS_COLLECTION,
 } = require("../testData.json");
+
+const postsWithObjectId = posts.map((post) => ({
+  ...post,
+  _id: ObjectId(post._id),
+}));
 
 describe("Posts routes tests", () => {
   let client;
@@ -26,12 +33,12 @@ describe("Posts routes tests", () => {
   });
 
   test("GET /posts should get all the posts", async () => {
-    await client.db(TEST_DATABASE).collection(POSTS_COLLECTION).insertMany(posts);
+    await client.db(TEST_DATABASE).collection(POSTS_COLLECTION).insertMany(postsWithObjectId);
 
-    const response = await supertest(app).get("/posts");
+    const response = await supertest(app).get("/post");
 
     expect(response.statusCode).toEqual(200);
-    expect(response.body.length).toBeGratherThan(0);
+    expect(response.body.length).toBeGreaterThan(0);
     expect(response.body).toStrictEqual(posts);
   });
 });

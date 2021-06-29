@@ -1,13 +1,19 @@
 /* eslint-disable no-undef */
 const supertest = require("supertest");
+const { ObjectId } = require("mongodb");
 const app = require("../../src/server");
 const mongoConnection = require("../../src/service/mongoConnection");
 
 const {
   TEST_DATABASE,
   USERS_COLLECTION,
-  users: [user],
+  users,
 } = require("../testData.json");
+
+const [user] = users.map((individualUser) => ({
+  ...individualUser,
+  _id: ObjectId(individualUser._id),
+}));
 
 describe("Users routes tests", () => {
   let client;
@@ -64,7 +70,6 @@ describe("Users routes tests", () => {
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.token).toBeDefined();
-    expect(response.body.userId).toEqual(user._id);
     expect(response.body.name).toEqual(user.name);
   });
 
