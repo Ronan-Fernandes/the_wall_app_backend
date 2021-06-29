@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 const supertest = require("supertest");
-const { ObjectId } = require("mongodb");
 const app = require("../../src/server");
 const mongoConnection = require("../../src/service/mongoConnection");
 
@@ -82,7 +81,7 @@ describe("Users routes tests", () => {
 
   test("POST /user/login when password is wrong", async () => {
     await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertOne({
-      ...user, password: user.hash, _id: ObjectId(user._id),
+      ...user, password: user.hash,
     });
 
     const response = await supertest(app).post("/user/login").send({
@@ -97,7 +96,7 @@ describe("Users routes tests", () => {
 
   test("POST /user/login when email is wrong", async () => {
     await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertOne({
-      ...user, password: user.hash, _id: ObjectId(user._id),
+      ...user, password: user.hash,
     });
 
     const response = await supertest(app).post("/user/login").send({
