@@ -1,0 +1,23 @@
+{
+  "users": [
+    {
+      "name": "user name",
+      "email": "email@email.com",
+      "password": "123456789",
+      "_id": 1,
+      "hash": "$2a$10$q3C9I2uWtkdyNXaIdm.1nO9hP5EkmREF0nApQWO6irY6XboOg1rTy"
+    }
+  ],
+  "posts": [
+    {
+      "title": "post title",
+      "content": "some post content tha some user has posted.",
+      "userName": "user name",
+      "userID": 1,
+      "_id": 1
+    }
+  ],
+  "TEST_DATABASE": "the_wall_app_tests",
+  "USERS_COLLECTION": "users",
+  "POSTS_COLLECTION": "posts"
+}
