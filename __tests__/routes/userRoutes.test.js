@@ -39,7 +39,7 @@ describe("Users routes tests", () => {
 
   test("POST /user/register  Create user when user already exists.", async () => {
     await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertOne({
-      ...user, password: user.hash, _id: ObjectId(user._id),
+      ...user, password: user.hash,
     });
 
     const response = await supertest(app).post("/user/register").send({
@@ -54,8 +54,8 @@ describe("Users routes tests", () => {
   });
 
   test("POST /user/login", async () => {
-    const createdUser = await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertOne({
-      ...user, password: user.hash, _id: ObjectId(user._id),
+    await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertOne({
+      ...user, password: user.hash,
     });
 
     const response = await supertest(app).post("/user/login").send({
@@ -65,7 +65,8 @@ describe("Users routes tests", () => {
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.token).toBeDefined();
-    expect(response.body.name).toEqual(createdUser.ops[0].name);
+    expect(response.body.userId).toEqual(user._id);
+    expect(response.body.name).toEqual(user.name);
   });
 
   test("POST /user/login when user does not exist.", async () => {
