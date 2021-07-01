@@ -59,11 +59,10 @@ describe("Posts routes tests", () => {
     });
 
     const response = await supertest(app).post("/post").send({
-      title: posts.title,
-      content: posts.content,
+      title: posts[0].title,
+      content: posts[0].content,
     })
-      .set("Accept", "application/json")
-      .set("Authentication", authResponse.body.token);
+      .set("authorization", authResponse.body.token);
 
     expect(response.statusCode).toEqual(201);
     expect(response.body.message).toEqual("Post succefully created");
@@ -75,9 +74,7 @@ describe("Posts routes tests", () => {
     const response = await supertest(app).post("/post").send({
       title: posts.title,
       content: posts.content,
-    })
-      .set("Accept", "application/json");
-
+    });
     expect(response.statusCode).toEqual(401);
     expect(response.body.message).toEqual("Unauthorized");
   });
