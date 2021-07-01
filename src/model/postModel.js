@@ -26,6 +26,16 @@ const findPosts = async (query) => {
   }
 };
 
+const createPost = async (query) => {
+  try {
+    const client = await mongoConnection();
+    await client.db(DB_NAME).collection(COLLECTION).insertOne(query);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findPosts,
+  createPost,
 };

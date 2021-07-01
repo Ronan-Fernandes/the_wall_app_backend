@@ -8,12 +8,10 @@ const postRoutes = require("./routes/postRoutes");
 const app = express();
 app.use(cors());
 
-app.use(bodyParser.json({
-  limit: "10mb",
-}));
+app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({
-  extended: false,
+  extended: true,
 }));
 
 app.use("/user", userRoutes);

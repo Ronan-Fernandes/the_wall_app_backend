@@ -13,6 +13,26 @@ const getPosts = async (req, res) => {
   }
 };
 
+const saveNewPost = async (req, res) => {
+  try {
+    const { user: { name, userId }, body: { content, title } } = req;
+    await postModel.createPost({
+      title,
+      content,
+      userId,
+      name,
+    });
+    return res.status(201).json({
+      message: "Post succefully created",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: `Something whent wrong erro: ${error}`,
+    });
+  }
+};
+
 module.exports = {
   getPosts,
+  saveNewPost,
 };
