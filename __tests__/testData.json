@@ -4,8 +4,15 @@
       "name": "user name",
       "email": "email@email.com",
       "password": "123456789",
-      "_id": 1,
+      "_id": "60da8527dfd30535d31be06a",
       "hash": "$2a$10$q3C9I2uWtkdyNXaIdm.1nO9hP5EkmREF0nApQWO6irY6XboOg1rTy"
+    },
+    {
+      "name": "second user",
+      "email": "second@email.com",
+      "password": "1234567",
+      "_id": "60de4ed2be54e84a3a83f57d",
+      "hash": "$2a$10$eLbcE2LixF3IQ5U1fi8axe40u89Uoj7Zgit0o/PBVU70P/REhNTz2"
     }
   ],
   "posts": [
@@ -15,6 +22,13 @@
       "userName": "user name",
       "userID": "60da8527dfd30535d31be06a",
       "_id": "60da84f3a5cc6d35356d3ab5"
+    },
+    {
+      "title": "post from user 2",
+      "content": "hey I'm the second user",
+      "userName": "second user",
+      "userID": "60de4ed2be54e84a3a83f57d",
+      "_id": "60de4d95af85dc90c0597c19"
     }
   ],
   "TEST_DATABASE": "the_wall_app_tests",

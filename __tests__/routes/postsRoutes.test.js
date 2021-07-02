@@ -18,8 +18,10 @@ const postsWithObjectId = posts.map((post) => ({
 }));
 
 const usersWithObejectId = users.map((user) => ({
-  ...user,
   _id: ObjectId(user._id),
+  name: user.name,
+  email: user.email,
+  password: user.hash,
 }));
 
 describe("Posts routes tests", () => {
@@ -48,10 +50,7 @@ describe("Posts routes tests", () => {
   });
 
   test("POST /post should create a new post", async () => {
-    await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertOne({
-      ...usersWithObejectId[0],
-      password: usersWithObejectId[0].hash,
-    });
+    await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertMany(usersWithObejectId);
 
     const authResponse = await supertest(app).post("/user/login").send({
       email: users[0].email,
@@ -77,5 +76,65 @@ describe("Posts routes tests", () => {
     });
     expect(response.statusCode).toEqual(401);
     expect(response.body.message).toEqual("Unauthorized");
+  });
+
+  test("PUT /post/:id should edit his posts", async () => {
+    // arrange
+    const expectedEditedTitle = "post title edited";
+    const expectedEditedContent = "edited post content";
+
+    await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertMany(usersWithObejectId);
+    await client.db(TEST_DATABASE).collection(POSTS_COLLECTION).insertMany(postsWithObjectId);
+
+    const authResponse = await supertest(app).post("/user/login").send({
+      email: users[0].email,
+      password: users[0].password,
+    });
+
+    // act
+    await supertest(app).put(`/post/${posts[0]._id}`).send({
+      title: expectedEditedTitle,
+      content: expectedEditedContent,
+    })
+      .set("authorization", authResponse.body.token)
+      .expect(204);
+
+    const editedPost = await client.db(TEST_DATABASE).collection(POSTS_COLLECTION).findOne({
+      _id: ObjectId(posts[0]._id),
+    });
+
+    // assert
+    expect(editedPost.title).toEqual(expectedEditedTitle);
+    expect(editedPost.content).toEqual(expectedEditedContent);
+  });
+
+  test("PUT /post/:id should not edit other's users posts", async () => {
+    // arrange
+    const expectedEditedTitle = "post title edited";
+    const expectedEditedContent = "edited post content";
+
+    await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertMany(usersWithObejectId);
+    await client.db(TEST_DATABASE).collection(POSTS_COLLECTION).insertMany(postsWithObjectId);
+
+    const authResponse = await supertest(app).post("/user/login").send({
+      email: users[0].email,
+      password: users[0].password,
+    });
+
+    // act
+    await supertest(app).put(`/post/${posts[1]._id}`).send({
+      title: expectedEditedTitle,
+      content: expectedEditedContent,
+    })
+      .set("authorization", authResponse.body.token)
+      .expect(401);
+
+    const editedPost = await client.db(TEST_DATABASE).collection(POSTS_COLLECTION).findOne({
+      _id: ObjectId(posts[1]._id),
+    });
+
+    // assert
+    expect(editedPost.title).toEqual(posts[1].title);
+    expect(editedPost.content).toEqual(posts[1].content);
   });
 });
