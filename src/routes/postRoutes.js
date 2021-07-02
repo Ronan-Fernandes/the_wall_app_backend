@@ -6,5 +6,6 @@ const { validateJWTToken } = require("../service/jwtAuth");
 
 router.get("/", postController.getPosts);
 router.post("/", validateJWTToken, joiMiddleware(joisScheema.createPostPOST, "body"), postController.saveNewPost);
+router.put("/:id", validateJWTToken, joiMiddleware(joisScheema.editPostPUT, "params"), postController.editPost);
 
 module.exports = router;

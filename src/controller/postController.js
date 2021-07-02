@@ -32,7 +32,38 @@ const saveNewPost = async (req, res) => {
   }
 };
 
+const editPost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content } = req.body;
+    const { userId } = req.user;
+
+    const [post] = await postModel.findPosts({ _id: id });
+
+    if (!post) {
+      return res.status(404).json({
+        message: "post not found",
+      });
+    }
+
+    if (userId !== post.userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    await postModel.updatePost(id, title, content);
+
+    return res.status(204).end();
+  } catch (error) {
+    return res.status(500).json({
+      error: `Something whent wrong erro: ${error}`,
+    });
+  }
+};
+
 module.exports = {
   getPosts,
   saveNewPost,
+  editPost,
 };

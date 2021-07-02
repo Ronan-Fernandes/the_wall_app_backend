@@ -15,6 +15,9 @@ const schemas = {
     title: Joi.string().required(),
     content: Joi.string().required(),
   }),
+  editPostPUT: Joi.object({
+    id: Joi.string().required(),
+  }),
 };
 
 module.exports = schemas;

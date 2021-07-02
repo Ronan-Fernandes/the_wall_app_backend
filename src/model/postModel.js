@@ -35,7 +35,20 @@ const createPost = async (query) => {
   }
 };
 
+const updatePost = async (id, title, content) => {
+  try {
+    const client = await mongoConnection();
+    await client.db(DB_NAME).collection(COLLECTION).updateOne(
+      { _id: ObjectId(id) },
+      { $set: { title, content } },
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findPosts,
   createPost,
+  updatePost,
 };

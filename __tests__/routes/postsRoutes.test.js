@@ -91,6 +91,7 @@ describe("Posts routes tests", () => {
       password: users[0].password,
     });
 
+    console.log(authResponse.body);
     // act
     await supertest(app).put(`/post/${posts[0]._id}`).send({
       title: expectedEditedTitle,
@@ -122,18 +123,19 @@ describe("Posts routes tests", () => {
     });
 
     // act
-    await supertest(app).put(`/post/${posts[1]._id}`).send({
+    const response = await supertest(app).put(`/post/${posts[1]._id}`).send({
       title: expectedEditedTitle,
       content: expectedEditedContent,
     })
-      .set("authorization", authResponse.body.token)
-      .expect(401);
+      .set("authorization", authResponse.body.token);
 
     const editedPost = await client.db(TEST_DATABASE).collection(POSTS_COLLECTION).findOne({
       _id: ObjectId(posts[1]._id),
     });
 
     // assert
+    expect(response.statusCode).toEqual(401);
+    expect(response.body.message).toEqual("Unauthorized");
     expect(editedPost.title).toEqual(posts[1].title);
     expect(editedPost.content).toEqual(posts[1].content);
   });
