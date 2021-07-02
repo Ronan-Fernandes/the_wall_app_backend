@@ -47,8 +47,18 @@ const updatePost = async (id, title, content) => {
   }
 };
 
+const remove = async (id) => {
+  try {
+    const client = await mongoConnection();
+    await client.db(DB_NAME).collection(COLLECTION).deleteOne({ _id: ObjectId(id) });
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findPosts,
   createPost,
   updatePost,
+  remove,
 };

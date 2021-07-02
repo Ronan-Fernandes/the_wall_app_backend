@@ -158,10 +158,8 @@ describe("Posts routes tests", () => {
       _id: ObjectId(posts[0]._id),
     });
 
-    console.log("deleteeeeeeeeed", editedPost);
     // assert
-    expect(editedPost.title).toEqual();
-    expect(editedPost.content).toEqual();
+    expect(editedPost).toEqual(null);
   });
 
   test("PUT /post/:id should not delete other's users posts", async () => {
