@@ -16,24 +16,16 @@ const generateToken = (payload) => {
   }
 };
 
-// const validateJWT = (required = true) => (req, _res, next) => {
-//   try {
-//     const token = req.headers.authorization;
-//     req.required = required;
-//     const user = jwt.verify(token, SECRET_KEY);
-//     req.user = user;
-//     return next();
-//   } catch (_) {
-//     return next();
-//   }
-// };
-
-const validateJWTToken = (token) => {
+const validateJWTToken = (req, res, next) => {
   try {
+    const token = req.headers.authorization;
     const user = jwt.verify(token, SECRET_KEY);
-    return user;
+    req.user = user;
+    return next();
   } catch (error) {
-    throw error;
+    return res.status(401).json({
+      message: "Unauthorized",
+    });
   }
 };
 

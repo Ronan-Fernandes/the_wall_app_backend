@@ -1,24 +1,25 @@
 /* eslint-disable no-undef */
 const supertest = require("supertest");
+const { ObjectId } = require("mongodb");
 const app = require("../../src/server");
 const mongoConnection = require("../../src/service/mongoConnection");
 
-const TEST_DATABASE = "the_wall_app_tests";
-const COLLECTION = "users";
-const user = {
-  name: "user name",
-  email: "email@email.com",
-  password: "123456789",
-};
+const {
+  TEST_DATABASE,
+  USERS_COLLECTION,
+  users,
+} = require("../testData.json");
 
-const userHash = "$2a$10$q3C9I2uWtkdyNXaIdm.1nO9hP5EkmREF0nApQWO6irY6XboOg1rTy";
+const [user] = users.map((individualUser) => ({
+  ...individualUser,
+  _id: ObjectId(individualUser._id),
+}));
 
-describe("User route tests", () => {
+describe("Users routes tests", () => {
   let client;
 
   beforeAll(async () => {
     client = await mongoConnection();
-    dataBaseUsersCollection = await client.db(TEST_DATABASE).collection(COLLECTION);
   });
 
   afterEach(async () => {
@@ -30,26 +31,36 @@ describe("User route tests", () => {
   });
 
   test("POST /user/register  Create user.", async () => {
-    const response = await supertest(app).post("/user/register").send({ ...user, confirm_password: "123456789" });
+    const response = await supertest(app).post("/user/register").send({
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      confirm_password: "123456789",
+    });
 
     expect(response.statusCode).toEqual(201);
     expect(response.body.message).toEqual("User registred with success!");
   });
 
   test("POST /user/register  Create user when user already exists.", async () => {
-    await client.db(TEST_DATABASE).collection(COLLECTION).insertOne({
-      ...user, password: userHash,
+    await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertOne({
+      ...user, password: user.hash,
     });
 
-    const response = await supertest(app).post("/user/register").send({ ...user, confirm_password: "123456789" });
+    const response = await supertest(app).post("/user/register").send({
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      confirm_password: "123456789",
+    });
 
     expect(response.statusCode).toEqual(409);
     expect(response.body.error).toEqual("User already exists!");
   });
 
   test("POST /user/login", async () => {
-    const createdUser = await client.db(TEST_DATABASE).collection(COLLECTION).insertOne({
-      ...user, password: userHash,
+    await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertOne({
+      ...user, password: user.hash,
     });
 
     const response = await supertest(app).post("/user/login").send({
@@ -59,7 +70,7 @@ describe("User route tests", () => {
 
     expect(response.statusCode).toEqual(200);
     expect(response.body.token).toBeDefined();
-    expect(response.body.name).toEqual(createdUser.ops[0].name);
+    expect(response.body.name).toEqual(user.name);
   });
 
   test("POST /user/login when user does not exist.", async () => {
@@ -74,8 +85,8 @@ describe("User route tests", () => {
   });
 
   test("POST /user/login when password is wrong", async () => {
-    await client.db(TEST_DATABASE).collection(COLLECTION).insertOne({
-      ...user, password: userHash,
+    await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertOne({
+      ...user, password: user.hash,
     });
 
     const response = await supertest(app).post("/user/login").send({
@@ -89,8 +100,8 @@ describe("User route tests", () => {
   });
 
   test("POST /user/login when email is wrong", async () => {
-    await client.db(TEST_DATABASE).collection(COLLECTION).insertOne({
-      ...user, password: userHash,
+    await client.db(TEST_DATABASE).collection(USERS_COLLECTION).insertOne({
+      ...user, password: user.hash,
     });
 
     const response = await supertest(app).post("/user/login").send({

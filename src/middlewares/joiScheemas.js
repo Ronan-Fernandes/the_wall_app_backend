@@ -11,6 +11,13 @@ const schemas = {
     email: Joi.string().email({ tlds: false }).required(),
     password: Joi.string().min(6).max(30).required(),
   }),
+  createPostPOST: Joi.object().keys({
+    title: Joi.string().required(),
+    content: Joi.string().required(),
+  }),
+  paramsId: Joi.object({
+    id: Joi.string().required(),
+  }),
 };
 
 module.exports = schemas;
