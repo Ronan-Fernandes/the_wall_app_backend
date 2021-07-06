@@ -37,6 +37,7 @@ The gmail login and password for the environment variables was sent in the proje
 
 ## usage
 Once the variables are ready and mongoDB service are running you can start the app.
+
 To run the app:
 ```bash
 npm start
@@ -44,6 +45,7 @@ npm start
 
 ## Tests
 The tests was coded with Jest and supertest.
+
 To run the tests:
 ```bash
 npm test
